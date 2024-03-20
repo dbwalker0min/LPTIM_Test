@@ -90,6 +90,9 @@ int main(void)
   MX_GPIO_Init();
   MX_LPTIM1_Init();
   /* USER CODE BEGIN 2 */
+  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
+
+  HAL_LPTIM_Counter_Start_IT(&hlptim1, (uint32_t)(5*32e6/128));
 
   /* USER CODE END 2 */
 
@@ -97,7 +100,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
     /* USER CODE END WHILE */
+	  HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
 
     /* USER CODE BEGIN 3 */
   }
@@ -211,7 +216,9 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_LPTIM_AutoReloadMatchCallback(LPTIM_HandleTypeDef* h) {
+	HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
+}
 /* USER CODE END 4 */
 
 /**
